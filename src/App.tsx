@@ -1,25 +1,38 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import * as GiiKER from 'giiker'
 
-class App extends Component {
+interface IProps {
+
+}
+interface IState {
+  giiker: any
+}
+
+class App extends Component<IProps, IState> {
+
+  constructor(props: any){
+    super(props)
+    this.state = {
+      giiker: null
+    }
+  }
+
+  connect = async () => {
+    const giiker = await GiiKER.connect();
+    giiker.on('move', (move: any) => {
+        console.log(move.face); //=> "F"
+        console.log(move.amount); //=> -1
+        console.log(move.notation); //=> "F'"
+    });
+    this.setState({ giiker })
+  }
+  
   render() {
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.tsx</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+        <button onClick={this.connect}>Connect</button>
       </div>
     );
   }
